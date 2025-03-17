@@ -1,54 +1,54 @@
 # Docker Cron Environment
 
-Python 3.12とcronを使用した環境変数対応のDockerコンテナサンプルです。
+A sample Docker container with Python 3.12 and cron that supports environment variables.
 
-## 特徴
+## Features
 
 - Python 3.12
-- python-dotenvによる環境変数の管理
-- uvによるパッケージ管理
-- 2フェーズビルドのDockerfile
-- ログ出力機能
-- Docker Compose対応
+- Environment variable management with python-dotenv
+- Package management with uv
+- Two-phase build Dockerfile
+- Logging functionality
+- Docker Compose support
 
-## 前提条件
+## Prerequisites
 
 - Docker
 - Docker Compose v2
 
-## 使用方法
+## Usage
 
-### Docker Composeを使用する場合（推奨）
+### Using Docker Compose (Recommended)
 
-1. 環境変数ファイルの準備:
+1. Prepare environment variables:
 ```bash
 cp .env.example .env
 ```
 
-2. コンテナの起動:
+2. Start the container:
 ```bash
 docker compose up -d --build
 ```
 
-3. ログの確認:
+3. Check logs:
 ```bash
-# ホストマシンの logs ディレクトリに直接出力されます
+# Logs are directly output to the logs directory on the host machine
 tail -f logs/cron.log
 ```
 
-### Docker単体を使用する場合
+### Using Docker Standalone
 
-1. 環境変数ファイルの準備:
+1. Prepare environment variables:
 ```bash
 cp .env.example .env
 ```
 
-2. Dockerイメージのビルド:
+2. Build Docker image:
 ```bash
 docker build -t cron-env -f docker/Dockerfile .
 ```
 
-3. コンテナの実行:
+3. Run container:
 ```bash
 docker run -d \
   --name cron-container \
@@ -57,63 +57,63 @@ docker run -d \
   cron-env
 ```
 
-4. ログの確認:
+4. Check logs:
 ```bash
 tail -f logs/cron.log
 ```
 
-### コンテナの停止と削除
+### Stopping and Removing Containers
 
 ```bash
-# Docker Composeの場合
+# For Docker Compose
 docker compose down
 
-# Docker単体の場合
+# For standalone Docker
 docker stop cron-container
 docker rm cron-container
 ```
 
-## 環境変数
+## Environment Variables
 
-- `CRON_MESSAGE`: cronジョブで表示されるメッセージ（デフォルト: "デフォルトメッセージ"）
+- `CRON_MESSAGE`: Message displayed by the cron job (default: "default message")
 
-## トラブルシューティング
+## Troubleshooting
 
-### ログが出力されない場合
+### If Logs Are Not Being Output
 
-1. コンテナが正常に動作していることを確認:
+1. Verify the container is running properly:
 ```bash
 docker ps
 ```
 
-2. cronデーモンの状態を確認:
+2. Check cron daemon status:
 ```bash
 docker exec cron-container service cron status
 ```
 
-3. crontabの設定を確認:
+3. Check crontab configuration:
 ```bash
 docker exec cron-container crontab -l
 ```
 
-## ディレクトリ構造
+## Directory Structure
 
 ```
 .
 ├── docker/
-│   ├── Dockerfile     # マルチステージビルド用Dockerfile
-│   ├── crontab        # cronジョブの設定ファイル
-│   └── entrypoint.sh  # コンテナ起動時の初期化スクリプト
-├── logs/              # ログ出力ディレクトリ
-├── cron_job.py        # 実行されるPythonスクリプト
-├── docker-compose.yml # Docker Compose設定ファイル
-├── requirements.txt   # Pythonパッケージの依存関係
-├── .env.example       # 環境変数のサンプルファイル
-└── README.md         # このファイル
+│   ├── Dockerfile     # Dockerfile for multi-stage build
+│   ├── crontab        # Cron job configuration file
+│   └── entrypoint.sh  # Initialization script for container startup
+├── logs/              # Log output directory
+├── cron_job.py        # Python script to be executed
+├── docker-compose.yml # Docker Compose configuration file
+├── requirements.txt   # Python package dependencies
+├── .env.example       # Sample environment variables file
+└── README.md         # This file
 ```
 
-## 注意事項
+## Notes
 
-- ログディレクトリ（`logs/`）は自動的に作成されます
-- 環境変数ファイル（`.env`）は必ず準備してください
-- コンテナは`unless-stopped`設定で自動再起動します
+- The log directory (`logs/`) is created automatically
+- The environment variable file (`.env`) must be prepared
+- The container automatically restarts with the `unless-stopped` setting
