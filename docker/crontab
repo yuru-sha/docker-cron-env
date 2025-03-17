@@ -1,0 +1,6 @@
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PYTHONPATH=/app/docker-cron-env
+
+# 毎分実行
+*/1 * * * * cd /app && python docker-cron-env/cron_job.py >> /var/log/cron.log 2>&1

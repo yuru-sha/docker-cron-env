@@ -1,0 +1,10 @@
+services:
+  cron:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: cron-container
+    volumes:
+      - ./.env:/app/.env:ro  # 環境変数ファイルをマウント（読み取り専用）
+      - ./logs:/var/log      # ログディレクトリをマウント
+    restart: unless-stopped
